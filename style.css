@@ -1,0 +1,545 @@
+/* =========================
+   DESIGN TOKENS
+========================= */
+:root {
+  --bg-main: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --text-main: #0f172a;
+  --primary: #6366f1;
+  --danger: #ef4444;
+  --border: rgba(0, 0, 0, 0.08);
+  --radius: 14px;
+  --blur: blur(18px);
+}
+
+body[data-theme="dark"] {
+  --bg-main: #020617;
+  --bg-card: rgba(15, 23, 42, 0.75);
+  --text-main: #e5e7eb;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+   RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at top, #c7d2fe, var(--bg-main));
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.6s ease;
+}
+
+/* =========================
+   APP CONTAINER
+========================= */
+#app {
+  width: 440px;
+  background: var(--bg-card);
+  backdrop-filter: var(--blur);
+  border-radius: var(--radius);
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  animation: appReveal 1s cubic-bezier(.22,1,.36,1);
+}
+
+/* =========================
+   HEADER
+========================= */
+.app-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary), #818cf8);
+  color: white;
+}
+
+.app-header h1 {
+  font-size: 22px;
+  letter-spacing: 0.5px;
+}
+
+#themeToggle {
+  background: rgba(255,255,255,0.25);
+  border: none;
+  padding: 8px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.4s ease, background 0.4s;
+}
+
+#themeToggle:hover {
+  transform: rotate(180deg) scale(1.1);
+  background: rgba(255,255,255,0.4);
+}
+
+/* =========================
+   MAIN AREA
+========================= */
+.app-main {
+  padding: 22px;
+}
+
+/* =========================
+   INPUT
+========================= */
+.todo-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-main);
+  transition: all 0.35s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.2);
+}
+
+button {
+  background: linear-gradient(135deg, var(--primary), #818cf8);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.35s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(99,102,241,0.4);
+}
+
+/* =========================
+   FILTERS
+========================= */
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.filter {
+  flex: 1;
+  padding: 8px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  transition: all 0.3s ease;
+}
+
+.filter.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+}
+
+/* =========================
+   TODO LIST
+========================= */
+ul {
+  list-style: none;
+}
+
+li {
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.6),
+    rgba(255,255,255,0.2)
+  );
+  backdrop-filter: var(--blur);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: taskEnter 0.4s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+li:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+li.completed {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+li.removing {
+  animation: taskExit 0.45s forwards;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.app-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: var(--blur);
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes appReveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes taskEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes taskExit {
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+li.completed::after {
+  content: "🎉 ✨ 🎊";
+  position: absolute;
+  right: 10px;
+  animation: confetti 1s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes confetti {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.8);
+  }
+}
+li {
+  background: var(--bg-main);
+  box-shadow:
+    6px 6px 14px rgba(0,0,0,0.15),
+    -6px -6px 14px rgba(255,255,255,0.7);
+}
+
+body[data-theme="dark"] li {
+  box-shadow:
+    6px 6px 14px rgba(0,0,0,0.7),
+    -6px -6px 14px rgba(255,255,255,0.05);
+}
+#app {
+  position: relative;
+}
+
+#app::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    #6366f1,
+    #22d3ee,
+    #a78bfa,
+    #6366f1
+  );
+  background-size: 300% 300%;
+  animation: borderFlow 6s linear infinite;
+  z-index: -1;
+}
+
+@keyframes borderFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+#app {
+  position: relative;
+}
+
+#app::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    rgba(255,255,255,0.2) 25%,
+    rgba(255,255,255,0.5) 37%,
+    rgba(255,255,255,0.2) 63%
+  );
+  background-size: 200% 100%;
+  animation: skeleton 1.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes skeleton {
+  to {
+    background-position: -200% 0;
+  }
+}
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(255,255,255,0.35),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+button:hover::after {
+  opacity: 1;
+}
+/* ===== VISIBILITY FIX ===== */
+body {
+  background:
+    radial-gradient(circle at top, #c7d2fe, transparent 60%),
+    linear-gradient(180deg, #eef2ff, #f8fafc);
+}
+
+#app {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(224, 231, 255, 0.95)
+  );
+}
+
+/* Text clarity */
+.app-header h1,
+.app-footer,
+.filters button,
+li span,
+input {
+  color: #0f172a;
+}
+
+input::placeholder {
+  color: #475569;
+}
+/* ===== CHECKBOX STYLE ===== */
+li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+li input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #6366f1;
+  cursor: pointer;
+}
+
+/* Completed look */
+li.completed {
+  background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+  border-left: 4px solid #4f46e5;
+}
+
+/* Completion tick animation */
+li.completed span::after {
+  content: " ✔";
+  color: #16a34a;
+  font-weight: bold;
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+body {
+  background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+}
+#app {
+  background: #ffffff;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
+}
+.app-header {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: #ffffff;
+}
+
+.app-header h1 {
+  font-size: 20px;
+}
+.todo-form input {
+  background: #f8fafc;
+  border: 1px solid #c7d2fe;
+  color: #0f172a;
+}
+
+.todo-form button {
+  background: #6366f1;
+}
+.filters button {
+  background: #eef2ff;
+  color: #1e293b;
+  border: none;
+}
+
+.filters .active {
+  background: #6366f1;
+  color: white;
+}
+li {
+  background: #f8fafc;
+  padding: 12px 14px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+li span {
+  flex: 1;
+  color: #1e293b;
+}
+li input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin: 0;
+}
+li button {
+  background: #e0e7ff;
+  color: #1e293b;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+li button:hover {
+  background: #ef4444;
+  color: white;
+}
+li.completed {
+  background: #e0e7ff;
+  border-left: 4px solid #6366f1;
+  text-decoration: line-through;
+}
+/* LIGHT MODE (DEFAULT) */
+:root {
+  --bg-page: linear-gradient(135deg, #e8f0ff, #f5f8ff);
+  --bg-card: linear-gradient(135deg, #7c83ff, #6aaeff);
+  --bg-inner: linear-gradient(135deg, #7ad7f0, #9ee7f5);
+  --text-main: #0f172a;
+  --btn-bg: #6366f1;
+  --white: #ffffff;
+}
+
+/* DARK MODE */
+body[data-theme="dark"] {
+  --bg-page: linear-gradient(135deg, #020617, #0f172a);
+  --bg-card: linear-gradient(135deg, #1e293b, #020617);
+  --bg-inner: linear-gradient(135deg, #020617, #020617);
+  --text-main: #e5e7eb;
+  --btn-bg: #6366f1;
+  --white: #0f172a;
+}
+
+/* PAGE */
+body {
+  background: var(--bg-page);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.4s ease;
+}
+
+/* CARD */
+#app {
+  width: 420px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+
+/* HEADER */
+.app-header {
+  padding: 18px;
+  color: white;
+  font-weight: 600;
+}
+
+/* INNER SECTION */
+.app-main {
+  background: var(--bg-inner);
+  padding: 20px;
+}
+
+/* INPUT */
+.todo-form input {
+  background: var(--white);
+  color: var(--text-main);
+  border-radius: 12px;
+}
+
+/* BUTTON */
+button {
+  background: var(--btn-bg);
+  color: white;
+  border-radius: 12px;
+}
